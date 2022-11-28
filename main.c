@@ -23,8 +23,7 @@
 #define POSSIBLE_EDGE 128
 #define EDGE 0
 
-int read_pgm_image(char *infilename, unsigned char **image, int *rows,
-    int *cols);
+//int read_pgm_image(char *infilename, unsigned char **image, int *rows,int *cols);
 int write_pgm_image(char *outfilename, unsigned char *image, int rows,
     int cols, char *comment, int maxval);
 
@@ -41,7 +40,7 @@ void apply_hysteresis(short int *mag, unsigned char *nms, int rows, int cols,
 void radian_direction(short int *delta_x, short int *delta_y, int rows,
     int cols, float **dir_radians, int xdirtag, int ydirtag);
 double angle_radians(double x, double y);
-
+/*
 double get_runtime(struct timespec start) {
   struct timespec finish;
   double seconds;
@@ -53,7 +52,7 @@ double get_runtime(struct timespec start) {
 
   return seconds;
 }
-
+*/
 /******************************************************************************
 * Function: read_pgm_image
 * Purpose: This function reads in an image in PGM format. The image can be
@@ -64,16 +63,19 @@ double get_runtime(struct timespec start) {
 * All comments in the header are discarded in the process of reading the
 * image. Upon failure, this function returns 0, upon sucess it returns 1.
 ******************************************************************************/
+
+/*
+
 int read_pgm_image(char *infilename, unsigned char **image, int *rows,
     int *cols)
 {
     FILE *fp;
     char buf[71];
 
-    /***************************************************************************
+    ***************************************************************************
     * Open the input image file for reading if a filename was given. If no
     * filename was provided, set fp to read from standard input.
-    ***************************************************************************/
+    ***************************************************************************
     if (infilename == NULL){
             fp = stdin;
             printf("ok");
@@ -86,10 +88,10 @@ int read_pgm_image(char *infilename, unsigned char **image, int *rows,
         }
     }
 
-    /***************************************************************************
+    ***************************************************************************
     * Verify that the image is in PGM format, read in the number of columns
     * and rows in the image and scan past all of the header information.
-    ***************************************************************************/
+    ***************************************************************************
     fgets(buf, 70, fp);
 
     printf(buf);printf("\n");
@@ -100,20 +102,20 @@ int read_pgm_image(char *infilename, unsigned char **image, int *rows,
         if (fp != stdin) fclose(fp);
         return(0);
     }
-    do{ fgets(buf, 70, fp); } while (buf[0] == '#');  /* skip all comment lines */
+    do{ fgets(buf, 70, fp); } while (buf[0] == '#');  * skip all comment lines *
 
         printf(buf);printf("\n");
 
 
     sscanf(buf, "%d %d", cols, rows);
-    do{ fgets(buf, 70, fp); } while (buf[0] == '#');  /* skip all comment lines */
+    do{ fgets(buf, 70, fp); } while (buf[0] == '#');  * skip all comment lines *
 
     printf(buf);printf("\n");
 
 
-    /***************************************************************************
+    ***************************************************************************
     * Allocate memory to store the image then read the image from the file.
-    ***************************************************************************/
+    ***************************************************************************
 
 
 
@@ -129,17 +131,19 @@ int read_pgm_image(char *infilename, unsigned char **image, int *rows,
 
 
         printf(*image);
-/*
+
     if ((*rows) != fread((*image), (*cols), (*rows), fp)){
         fprintf(stderr, "Error reading the image data in read_pgm_image().\n");
         if (fp != stdin) fclose(fp);
         free((*image));
         return(0);
     }
-*/
+
     if (fp != stdin) fclose(fp);
     return(1);
 }
+
+*/
 
 /******************************************************************************
 * Function: read_pgm_image
@@ -221,7 +225,7 @@ void follow_edges(unsigned char *edgemapptr, short *edgemagptr, short lowval,
     short *tempmagptr;
     unsigned char *tempmapptr;
     int i;
-    float thethresh;
+    //float thethresh;
     int x[8] = { 1, 1, 0, -1, -1, -1, 0, 1 },
         y[8] = { 0, 1, 1, 1, 0, -1, -1, -1 };
 
@@ -249,7 +253,8 @@ void apply_hysteresis(short int *mag, unsigned char *nms, int rows, int cols,
 {
     int r, c, pos, numedges, lowcount, highcount, lowthreshold, highthreshold,
         i, hist[32768], rr, cc;
-    short int maximum_mag, sumpix;
+    short int maximum_mag;
+    //short int sumpix;
 
     /****************************************************************************
     * Initialize the edge map to possible edges everywhere the non-maximal
@@ -290,7 +295,7 @@ void apply_hysteresis(short int *mag, unsigned char *nms, int rows, int cols,
         }
     }
 
-    printf("Hist loop in function %s runtime: %.3f\n", __FUNCTION__, get_runtime(start));
+    //printf("Hist loop in function %s runtime: %.3f\n", __FUNCTION__, get_runtime(start));
 
     /****************************************************************************
     * Compute the number of pixels that passed the nonmaximal suppression.
@@ -380,10 +385,10 @@ void non_max_supp(short *mag, short *gradx, short *grady, int nrows, int ncols,
         count<nrows; count++, resultptr += ncols, resultrowptr += ncols){
         *resultptr = *resultrowptr = (unsigned char)0;
     }
-
+/*
   struct timespec start;
   clock_gettime(CLOCK_MONOTONIC, &start);
-
+*/
     /****************************************************************************
     * Suppress non-maximum points.
     ****************************************************************************/
@@ -557,7 +562,7 @@ void non_max_supp(short *mag, short *gradx, short *grady, int nrows, int ncols,
         }
     }
 
-    printf("Function %s runtime: %.3f\n", __FUNCTION__, get_runtime(start));
+  //  printf("Function %s runtime: %.3f\n", __FUNCTION__, get_runtime(start));
 
 }
 
@@ -570,14 +575,14 @@ void non_max_supp(short *mag, short *gradx, short *grady, int nrows, int ncols,
 void canny(unsigned char *image, int rows, int cols, float sigma,
     float tlow, float thigh, unsigned char **edge, char *fname)
 {
-    FILE *fpdir = NULL;          /* File to write the gradient image to.     */
+    //FILE *fpdir = NULL;          /* File to write the gradient image to.     */
     unsigned char *nms;        /* Points that are local maximal magnitude. */
     short int *smoothedim,     /* The image after gaussian smoothing.      */
         *delta_x,        /* The first devivative image, x-direction. */
         *delta_y,        /* The first derivative image, y-direction. */
         *magnitude;      /* The magnitude of the gadient image.      */
-    int r, c, pos;
-    float *dir_radians = NULL;   /* Gradient direction image.                */
+    //int r, c, pos;
+    //float *dir_radians = NULL;   /* Gradient direction image.                */
 
     /****************************************************************************
     * Perform gaussian smoothing on the image using the input standard
@@ -597,17 +602,18 @@ void canny(unsigned char *image, int rows, int cols, float sigma,
     * to make the information available for computing an edge quality figure
     * of merit.
     ****************************************************************************/
+    /*
     if (fname != NULL){
 
-        /*************************************************************************
+        *************************************************************************
         * Compute the direction up the gradient, in radians that are
         * specified counteclockwise from the positive x-axis.
-        *************************************************************************/
+        *************************************************************************
         radian_direction(delta_x, delta_y, rows, cols, &dir_radians, -1, -1);
 
-        /*************************************************************************
+        *************************************************************************
         * Write the gradient direction image out to a file.
-        *************************************************************************/
+        *************************************************************************
         if ((fpdir = fopen(fname, "wb")) == NULL){
             fprintf(stderr, "Error opening the file %s for writing.\n", fname);
             exit(1);
@@ -616,7 +622,7 @@ void canny(unsigned char *image, int rows, int cols, float sigma,
         fclose(fpdir);
         free(dir_radians);
     }
-
+    */
     /****************************************************************************
     * Compute the magnitude of the gradient.
     ****************************************************************************/
@@ -747,8 +753,8 @@ void magnitude_x_y(short int *delta_x, short int *delta_y, int rows, int cols,
         exit(1);
     }
 
-    struct timespec start;
-    clock_gettime(CLOCK_MONOTONIC, &start);
+    //struct timespec start;
+    //clock_gettime(CLOCK_MONOTONIC, &start);
 
     for (r = 0, pos = 0; r<rows; r++){
         for (c = 0; c<cols; c++, pos++){
@@ -758,7 +764,7 @@ void magnitude_x_y(short int *delta_x, short int *delta_y, int rows, int cols,
         }
     }
 
-    printf("Loop in function %s runtime: %.3f\n", __FUNCTION__, get_runtime(start));
+    //printf("Loop in function %s runtime: %.3f\n", __FUNCTION__, get_runtime(start));
 
 }
 
@@ -797,8 +803,8 @@ void derrivative_x_y(short int *smoothedim, int rows, int cols,
     ****************************************************************************/
     if (CANNY_LIB_VERBOSE) printf("   Computing the X-direction derivative.\n");
 
-    struct timespec start;
-    clock_gettime(CLOCK_MONOTONIC, &start);
+    //struct timespec start;
+    //clock_gettime(CLOCK_MONOTONIC, &start);
 
     for (r = 0; r<rows; r++){
         pos = r * cols;
@@ -828,7 +834,7 @@ void derrivative_x_y(short int *smoothedim, int rows, int cols,
         }
     }
 
-    printf("Loop in function %s runtime: %.3f\n", __FUNCTION__, get_runtime(start));
+    //printf("Loop in function %s runtime: %.3f\n", __FUNCTION__, get_runtime(start));
 
 }
 
@@ -845,15 +851,17 @@ void gaussian_smooth(unsigned char *image, int rows, int cols, float sigma,
         windowsize,        /* Dimension of the gaussian kernel. */
         center;            /* Half of the windowsize. */
     float *tempim,        /* Buffer for separable filter gaussian smoothing. */
-        *kernel,        /* A one dimensional gaussian kernel. */
-        dot,            /* Dot product summing variable. */
-        sum;            /* Sum of the kernel weights variable. */
+        *kernel;        /* A one dimensional gaussian kernel. */
+    //float  dot,            /* Dot product summing variable. */
+        //sum;            /* Sum of the kernel weights variable. */
 
     /****************************************************************************
     * Create a 1-dimensional gaussian smoothing kernel.
     ****************************************************************************/
-    if (CANNY_LIB_VERBOSE) printf("   Computing the gaussian smoothing kernel.\n");
+
     float *ktmp = kernel;
+    if (CANNY_LIB_VERBOSE) printf("   Computing the gaussian smoothing kernel.\n");
+
     make_gaussian_kernel(sigma, &ktmp, &windowsize);
     kernel = ktmp;
     center = windowsize / 2;
@@ -876,8 +884,8 @@ void gaussian_smooth(unsigned char *image, int rows, int cols, float sigma,
     ****************************************************************************/
     if (CANNY_LIB_VERBOSE) printf("   Bluring the image in the X-direction.\n");
 
-    struct timespec start;
-    clock_gettime(CLOCK_MONOTONIC, &start);
+    //struct timespec start;
+    //clock_gettime(CLOCK_MONOTONIC, &start);
 
     float* dot_arr = calloc(cols, sizeof(float));
     float* sum_arr = calloc(cols, sizeof(float));
@@ -922,7 +930,7 @@ void gaussian_smooth(unsigned char *image, int rows, int cols, float sigma,
     free(dot_arr);
     free(sum_arr);
 
-    printf("Loops in function %s runtime: %.3f\n", __FUNCTION__, get_runtime(start));
+    //printf("Loops in function %s runtime: %.3f\n", __FUNCTION__, get_runtime(start));
 
     free(tempim);
     free(kernel);
@@ -991,10 +999,10 @@ unsigned char* to_grayscale(unsigned char* img, int width, int height, int chann
 int main()
 {
 
-    char *infilename = "road1.jpg";  /* Name of the input image */
+    char *infilename = "road2.jpg";  /* Name of the input image */
   char *dirfilename = NULL; /* Name of the output gradient direction image */
   char outfilename[128];    /* Name of the output "edge" image */
-  char composedfname[128];  /* Name of the output "direction" image */
+  //char composedfname[128];  /* Name of the output "direction" image */
   uint8_t *image;     /* The input image */
   uint8_t *edge;      /* The output edge image */
   int rows = 0, cols =0, channels = 0;           /* The dimensions of the image. */
@@ -1006,25 +1014,16 @@ int main()
                                gradient image that passes non-maximal
                                suppression. */
 
-
+  /****************************************************************************
+   * Read in the image. This read function allocates memory for the image.
+   ****************************************************************************/
+  if (CANNY_TEST_VERBOSE) printf("Reading the image %s.\n", infilename);
 
 
     image =  stbi_load(infilename,&cols,&rows,&channels,1);
     //stbi_write_bmp("road2.bmp",x,y,1,img);
     //uint8_t *img =  stbi__load_and_postprocess_8bit("road2.jpg",&x,&y,&ch,1);
     printf("x: %d, y: %d, ch: %d\n",cols,rows,channels);
-
-
-
-
-
-
-  /****************************************************************************
-   * Read in the image. This read function allocates memory for the image.
-   ****************************************************************************/
-  if (CANNY_TEST_VERBOSE)
-    printf("Reading the image %s.\n", infilename);
-
 
   //cols = 1200;rows = 717;
   //cols = 976;rows = 549;
@@ -1043,15 +1042,15 @@ int main()
   if (CANNY_TEST_VERBOSE)
     printf("Starting Canny edge detection.\n");
 
-
+/*
   if (dirfilename != NULL) {
     sprintf(composedfname, "%s_s_%3.2f_l_%3.2f_h_%3.2f.fim", infilename, sigma,
             tlow, thigh);
     dirfilename = composedfname;
   }
-
-  struct timespec start;
-  clock_gettime(CLOCK_MONOTONIC, &start);
+*/
+  //struct timespec start;
+  //clock_gettime(CLOCK_MONOTONIC, &start);
 
 ///------------
             //rows = 549;cols =976;
@@ -1059,7 +1058,7 @@ int main()
   printf("FINISH-------------------\n\n\n");
 ///---------------
 
-  printf("Total time: %.3f\n", get_runtime(start));
+  //printf("Total time: %.3f\n", get_runtime(start));
 
   /****************************************************************************
    * Write out the edge image to a file.
