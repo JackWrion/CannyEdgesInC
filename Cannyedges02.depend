@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1669624662 source:c:\users\asus\desktop\cannyedges\cannyedges02\main.c
+1669630211 source:c:\users\asus\desktop\cannyedges\cannyedges02\main.c
 	<stdio.h>
 	<stdlib.h>
 	"stb_image.h"

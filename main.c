@@ -5,14 +5,6 @@
 #include "stb_image_resize.h"
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
-
-
-
-
-
-
-//#include <stdio.h>
-//#include <stdlib.h>
 #include <math.h>
 #include <string.h>
 #include <time.h>
@@ -606,6 +598,7 @@ void canny(unsigned char *image, int rows, int cols, float sigma,
     * of merit.
     ****************************************************************************/
     if (fname != NULL){
+
         /*************************************************************************
         * Compute the direction up the gradient, in radians that are
         * specified counteclockwise from the positive x-axis.
@@ -998,7 +991,7 @@ unsigned char* to_grayscale(unsigned char* img, int width, int height, int chann
 int main()
 {
 
-    char *infilename = "road23.pgm";  /* Name of the input image */
+    char *infilename = "road1.jpg";  /* Name of the input image */
   char *dirfilename = NULL; /* Name of the output gradient direction image */
   char outfilename[128];    /* Name of the output "edge" image */
   char composedfname[128];  /* Name of the output "direction" image */
