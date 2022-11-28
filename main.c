@@ -99,6 +99,9 @@ int read_pgm_image(char *infilename, unsigned char **image, int *rows,
     * and rows in the image and scan past all of the header information.
     ***************************************************************************/
     fgets(buf, 70, fp);
+
+    printf(buf);printf("\n");
+
     if (strncmp(buf, "P5", 2) != 0){
         fprintf(stderr, "The file %s is not in PGM format in ", infilename);
         fprintf(stderr, "read_pgm_image().\n");
@@ -106,12 +109,22 @@ int read_pgm_image(char *infilename, unsigned char **image, int *rows,
         return(0);
     }
     do{ fgets(buf, 70, fp); } while (buf[0] == '#');  /* skip all comment lines */
+
+        printf(buf);printf("\n");
+
+
     sscanf(buf, "%d %d", cols, rows);
     do{ fgets(buf, 70, fp); } while (buf[0] == '#');  /* skip all comment lines */
+
+    printf(buf);printf("\n");
+
 
     /***************************************************************************
     * Allocate memory to store the image then read the image from the file.
     ***************************************************************************/
+
+
+
     if (((*image) = (unsigned char *)malloc((*rows)*(*cols))) == NULL){
         fprintf(stderr, "Memory allocation failure in read_pgm_image().\n");
         if (fp != stdin) fclose(fp);
@@ -122,6 +135,8 @@ int read_pgm_image(char *infilename, unsigned char **image, int *rows,
 
         fread((*image), (*cols), (*rows), fp)  ;
 
+
+        printf(*image);
 /*
     if ((*rows) != fread((*image), (*cols), (*rows), fp)){
         fprintf(stderr, "Error reading the image data in read_pgm_image().\n");
@@ -983,12 +998,12 @@ unsigned char* to_grayscale(unsigned char* img, int width, int height, int chann
 int main()
 {
 
-    char *infilename = "graysource.pgm";  /* Name of the input image */
+    char *infilename = "road23.pgm";  /* Name of the input image */
   char *dirfilename = NULL; /* Name of the output gradient direction image */
   char outfilename[128];    /* Name of the output "edge" image */
   char composedfname[128];  /* Name of the output "direction" image */
-  unsigned char *image;     /* The input image */
-  unsigned char *edge;      /* The output edge image */
+  uint8_t *image;     /* The input image */
+  uint8_t *edge;      /* The output edge image */
   int rows = 0, cols =0, channels = 0;           /* The dimensions of the image. */
   float sigma =0.7,              /* Standard deviation of the gaussian kernel. */
       tlow = 0.6,                 /* Fraction of the high threshold in hysteresis. */
@@ -1000,6 +1015,17 @@ int main()
 
 
 
+
+    image =  stbi_load(infilename,&cols,&rows,&channels,1);
+    //stbi_write_bmp("road2.bmp",x,y,1,img);
+    //uint8_t *img =  stbi__load_and_postprocess_8bit("road2.jpg",&x,&y,&ch,1);
+    printf("x: %d, y: %d, ch: %d\n",cols,rows,channels);
+
+
+
+
+
+
   /****************************************************************************
    * Read in the image. This read function allocates memory for the image.
    ****************************************************************************/
@@ -1007,14 +1033,16 @@ int main()
     printf("Reading the image %s.\n", infilename);
 
 
-  cols = 1200;rows = 717;
+  //cols = 1200;rows = 717;
   //cols = 976;rows = 549;
 
-
+/*
   if (read_pgm_image(infilename, &image, &rows, &cols) == 0) {
     fprintf(stderr, "Error reading the input image, %s.\n", infilename);
     exit(1);
   }
+*/
+
 
   /****************************************************************************
    * Perform the edge detection. All of the work takes place here.
@@ -1032,9 +1060,11 @@ int main()
   struct timespec start;
   clock_gettime(CLOCK_MONOTONIC, &start);
 
+///------------
+            //rows = 549;cols =976;
   canny(image, rows, cols, sigma, tlow, thigh, &edge, dirfilename);
   printf("FINISH-------------------\n\n\n");
-
+///---------------
 
   printf("Total time: %.3f\n", get_runtime(start));
 
@@ -1043,6 +1073,9 @@ int main()
    ****************************************************************************/
   sprintf(outfilename, "%s_s_%3.2f_l_%3.2f_h_%3.2f.y", infilename, sigma, tlow,
           thigh);
+
+
+
   if (CANNY_TEST_VERBOSE)
     printf("Writing the edge iname in the file %s.\n", outfilename);
 

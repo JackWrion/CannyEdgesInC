@@ -31,9 +31,17 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="grayroad.bmp" />
+		<Unit filename="graysource.pgm" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="road1.jpg" />
+		<Unit filename="road2.jpg" />
+		<Unit filename="road23.pgm" />
+		<Unit filename="stb_image.h" />
+		<Unit filename="stb_image_resize.h" />
+		<Unit filename="stb_image_write.h" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>
